@@ -1,0 +1,10 @@
+node_modules/
+*.log
+tmp/
+.DS_Store
+*.key
+
+# 默认工作区就是当前目录：在这里跑插件会把梦写进仓库
+dafiyu-dreams/
+dafiyu-memory/
+dafiyu-persona/

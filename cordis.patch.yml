@@ -1,0 +1,10 @@
+# 发布用的 bundle patch：**不放任何作者机器上的绝对路径**。
+# 所有路径都可以省略，插件会按 "工作区根 → 默认子目录" 推；
+# 想指定的话，在你自己 profile 的 cordis.patch.yml 里覆盖同一 entry 的 config。
+- insert:
+    - id: dafiyu-dream
+      name: '@local/dsh-plugin-dream'
+      config:
+        model: deepseek-flash
+        length: standard
+        wild: auto
