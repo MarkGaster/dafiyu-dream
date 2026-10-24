@@ -6,6 +6,15 @@
   "type": "module",
   "main": "index.js",
   "license": "MIT",
+  "author": "MarkGaster",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkGaster/dafiyu-dream.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MarkGaster/dafiyu-dream/issues"
+  },
+  "homepage": "https://github.com/MarkGaster/dafiyu-dream#readme",
   "keywords": [
     "dsh",
     "dsh-plugin",
