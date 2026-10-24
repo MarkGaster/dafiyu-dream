@@ -1,5 +1,7 @@
 # dafiyu-dream
 
+![dafiyu-dream](docs/assets/banner.png)
+
 > 从最近的对话里挑几段最烫的话，泡成一场**认不出来、但确实是它**的梦。
 
 A dream generator for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh): pick the most emotionally charged fragments of recent conversations, compress them into abstract images, write a short dream, self-check it, and save it as a markdown file.
