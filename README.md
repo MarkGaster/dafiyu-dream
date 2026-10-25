@@ -47,7 +47,7 @@ dsh plugin --profile <你的 profile> add link:/absolute/path/to/dafiyu-dream -w
 
 ```yaml
 - id: dafiyu-dream
-  name: dafiyu-dream
+  name: '@local/dsh-plugin-dream'   # 与 package.json 的 name 一致
   config:
     sourceDir: dafiyu-memory        # 对话 md 所在目录（相对 workspace 或绝对路径）
     outDir: dafiyu-dreams           # 梦存哪
@@ -115,6 +115,8 @@ dsh plugin --profile <你的 profile> add link:/absolute/path/to/dafiyu-dream -w
 - Windows 上如果环境变量读不到，会去注册表 `HKCU\Environment` 再读一次（其他平台没有这一步）。
 
 ## 素材格式
+
+**它不会自动读取 DSH 的会话历史**——只读 `sourceDir` 里、文件名匹配 `sourceGlob` 的文件。所以你得先把对话导出成 markdown 放进去。
 
 **这个工具是给中文对话用的**：一段素材里汉字占比低于 45% 会被跳过。
 
