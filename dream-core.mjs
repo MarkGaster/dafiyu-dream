@@ -4,6 +4,17 @@ import { closeSync, existsSync, mkdirSync, openSync, opendirSync, readFileSync, 
 import path from 'node:path'
 
 export const THEMES = ['深海', '星舰', '奇幻', '玄幻', '蒸汽朋克', '废土', '太空歌剧', '童话']
+// 每个主题给 3 个具体抓手：模型需要具体的物件才能落地，只给主题名它会写成抽象氛围
+export const THEME_ANCHORS = {
+  深海: ['水压压得耳朵发闷', '探照灯的光柱里有东西在飘', '头顶很远的地方才是水面'],
+  星舰: ['舷窗外的星带一动不动', '气闸泄压的嘶声', '舱壁低频的震动从脚底传上来'],
+  奇幻: ['墙缝里长出一截会动的东西', '影子比人多走了一步', '水面上浮着一条不该在这儿的路'],
+  玄幻: ['体内有股气往上顶', '脚下的地纹路忽然亮了一下', '远处山顶有人隔着云看着这边'],
+  蒸汽朋克: ['铜管烫手，蒸汽从接缝里漏出来', '满墙的齿轮咬合着走', '黄铜仪表盘的指针在抖'],
+  废土: ['风里全是沙，落在牙上', '生锈的铁皮屋顶被吹得响', '塑料布下面盖着别人留下的东西'],
+  太空歌剧: ['远处的舰体挡住了半颗星', '走廊尽头的门是气密的', '广播里的声音带着延迟'],
+  童话: ['面包屑留下的一路痕迹', '树后面有人小声数数', '门缝里透出暖黄的光'],
+}
 export const LENGTHS = {
   short: { segments: [3, 4], chars: [150, 250] },
   standard: { segments: [3, 6], chars: [250, 400] },
@@ -319,7 +330,7 @@ export async function generateDream(opts) {
   const {
     memoryDir, outDir, personaPath, apiKey, model = 'deepseek-flash',
     dryRun = false, log = () => {},
-    sourcePattern, sourceGlob,
+    sourcePattern, sourceGlob, theme: themeOpt,
   } = opts
   // 归一化放在核心里：插件和命令行都不会绕过窗口/长度/狂野度的校验
   const { length, wild, windowDays, k, verbatim: useVerbatim } = normalizeOptions(opts)
@@ -342,7 +353,9 @@ export async function generateDream(opts) {
       + '素材需要：文件名含日期、位于窗口内、段落以 "## " 开头、且带 "**我说：**" 标记。')
   }
 
-  const theme = THEMES[Math.floor(Math.random() * THEMES.length)]
+  const theme = (themeOpt && THEMES.includes(themeOpt))
+    ? themeOpt
+    : THEMES[Math.floor(Math.random() * THEMES.length)]
   const seed = Math.floor(Math.random() * 9000) + 1000
   // 狂野度：手动给了就用；auto 时由抽中素材里权重最高那条决定
   const maxScore = picked.reduce((a, p) => Math.max(a, p.score), 0)
@@ -395,9 +408,9 @@ export async function generateDream(opts) {
     + '- 用第一人称，像真的睡着时那样，不加解释；**不要括号旁白**（那像聊天，不像梦）\n'
     + `- ${len.segments[0]}–${len.segments[1]} 段，${len.chars[0]}–${len.chars[1]} 字，段落之间只用空行，不要小标题、不要「一二三」\n`
     + `- 目标是 ${len.chars[1]} 字 / ${len.segments[1]} 段以内；验收留 20% 容差（约 ${Math.round(len.chars[1] * 1.2)} 字），但请尽量守住目标值\n`
-    + `- 主世界是「${theme}」，可以换世界 0–2 次，换了也不要解释\n`
+    + `- 主世界是「${theme}」：必须出现其中至少一个专属细节——${(THEME_ANCHORS[theme] || []).join('；')}。可以用别的同类细节，但**不许直接写出主题名这个词**。可以换世界 0–2 次，换了也不要解释\n`
     + '- 不许出现「梦见」「象征」「隐喻」这类词\n'
-    + '- 意象里的东西只保留"感觉"，不许把它的名字写进正文\n'
+    + '- 「意象」列表里的词只保留感觉，不许把这些词本身写进正文（主题不在此列）\n'
     + '- 结尾停在一句话上，不总结、不升华\n'
     + `- 狂野度：${WILD_RULE[wildLevel]}\n`
     + (verbatim ? `- 有一句话要一字不改地嵌进去，而且必须**自然长在句子里**（不要单独成段、不要放结尾）：「${verbatim}」\n` : '')

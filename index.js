@@ -122,6 +122,7 @@ export function apply(ctx, config) {
 
   const definition = {
     name: 'dream',
+    input: { hint: 'short / standard / long，low / mid / high（可留空）' },
     description: '做一场梦：从最近的对话里挑素材，写一段不像日记的梦（可选 short / standard / long 与 low / mid / high）',
     handler: async (invocation) => {
       if (cfgError) return { kind: 'error', text: `插件配置有问题：${cfgError}` }
