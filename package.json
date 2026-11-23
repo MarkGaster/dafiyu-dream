@@ -1,6 +1,6 @@
 {
   "name": "@local/dsh-plugin-dream",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Make a dream from recent conversations: pick material, compress to abstract images, write, self-check, save.",
   "type": "module",
